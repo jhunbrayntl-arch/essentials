@@ -9,9 +9,11 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-  getAuth
+  getAuth,
+  initializeAuth,
+  browserLocalPersistence
 } from 'firebase/auth';
-import { initializeApp, getApps, getApp } from 'firebase/app';
+import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -23,13 +25,27 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase app
-const app = typeof window !== 'undefined' 
-  ? (getApps().length > 0 ? getApp() : initializeApp(firebaseConfig))
-  : null;
+// Check if Firebase is properly configured
+const isFirebaseConfigured = !!(
+  process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+  process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+);
 
-// Initialize auth only on client
-const auth = app ? getAuth(app) : null;
+let app: FirebaseApp | null = null;
+let auth: ReturnType<typeof getAuth> | null = null;
+
+// Initialize Firebase app only on client side
+if (typeof window !== 'undefined' && isFirebaseConfigured) {
+  try {
+    app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+    // Initialize Auth with local persistence for better SSR handling
+    auth = initializeAuth(app, {
+      persistence: browserLocalPersistence
+    });
+  } catch (error) {
+    console.error('Firebase initialization error:', error);
+  }
+}
 
 interface AuthContextType {
   user: User | null;
@@ -38,6 +54,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  isConfigured: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,9 +62,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const isConfigured = typeof window !== 'undefined' && isFirebaseConfigured;
 
   useEffect(() => {
-    if (!auth) {
+    if (!auth || !isConfigured) {
       setLoading(false);
       return;
     }
@@ -58,31 +76,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [isConfigured]);
 
   const signUp = async (email: string, password: string) => {
-    if (!auth) throw new Error('Firebase not initialized');
+    if (!auth) throw new Error('Firebase not initialized. Please check your environment variables.');
     await createUserWithEmailAndPassword(auth, email, password);
   };
 
   const signIn = async (email: string, password: string) => {
-    if (!auth) throw new Error('Firebase not initialized');
+    if (!auth) throw new Error('Firebase not initialized. Please check your environment variables.');
     await signInWithEmailAndPassword(auth, email, password);
   };
 
   const signInWithGoogle = async () => {
-    if (!auth) throw new Error('Firebase not initialized');
+    if (!auth) throw new Error('Firebase not initialized. Please check your environment variables.');
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
   };
 
   const logout = async () => {
-    if (!auth) throw new Error('Firebase not initialized');
+    if (!auth) throw new Error('Firebase not initialized. Please check your environment variables.');
     await signOut(auth);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signInWithGoogle, logout, isConfigured }}>
       {children}
     </AuthContext.Provider>
   );
