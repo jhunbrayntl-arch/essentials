@@ -52,8 +52,8 @@ export default function Home() {
               <Link href="/products" className="btn-primary inline-block text-center">
                 Shop Now
               </Link>
-              <Link href="/customizer" className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-full font-semibold hover:bg-white/20 transition-colors inline-block text-center">
-                Try Customizer
+              <Link href="/about" className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-full font-semibold hover:bg-white/20 transition-colors inline-block text-center">
+                Learn More
               </Link>
             </div>
 

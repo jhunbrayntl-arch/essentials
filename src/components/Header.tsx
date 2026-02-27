@@ -25,9 +25,6 @@ export default function Header() {
             <Link href="/products" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors">
               Shop
             </Link>
-            <Link href="/customizer" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors">
-              Customizer
-            </Link>
             <Link href="/about" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors">
               About
             </Link>
@@ -77,9 +74,6 @@ export default function Header() {
               </Link>
               <Link href="/products" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Shop
-              </Link>
-              <Link href="/customizer" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
-                Customizer
               </Link>
               <Link href="/about" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
                 About
