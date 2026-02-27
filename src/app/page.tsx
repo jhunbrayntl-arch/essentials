@@ -3,9 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { allProducts } from '@/data/products';
-import { ModelProvider } from '@/contexts/ModelContext';
-import ModelViewer from '@/components/customizer/ModelViewer';
-import PartSelector from '@/components/customizer/PartSelector';
 
 const featuredProducts = allProducts.slice(0, 4);
 
@@ -15,7 +12,7 @@ const shopCategories = [
   { name: 'Outerwear', image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=600&fit=crop' },
 ];
 
-function HomeContent() {
+export default function Home() {
   return (
     <main>
       {/* Urgency Banner */}
@@ -25,65 +22,54 @@ function HomeContent() {
         </p>
       </div>
 
-      {/* Hero Section with Model Customizer */}
-      <section className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center bg-neutral-100 pt-20">
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image - Realistic Human Model */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920&h=1080&fit=crop"
-            alt="Essentials Collection"
+            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1920&h=1080&fit=crop"
+            alt="Essentials Collection - Male Model"
             fill
-            className="object-cover opacity-10"
+            className="object-cover"
             priority
             unoptimized
           />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
         </div>
-        
-        <div className="relative z-10 container mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Text Content */}
-            <div className="text-center lg:text-left order-2 lg:order-1">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-6">
-                ESSENTIALS
-              </h1>
-              <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-xl mx-auto lg:mx-0">
-                Minimalist clothing for everyday life. Quality pieces that never go out of style.
-              </p>
-              
-              {/* Drag Instructions */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-8 shadow-lg">
-                <h2 className="text-xl font-bold mb-3 flex items-center justify-center lg:justify-start gap-2">
-                  <span className="text-2xl">🎨</span>
-                  Create Your Look
-                </h2>
-                <p className="text-neutral-600 mb-4">
-                  Drag items from below onto the model to mix and match your perfect outfit!
-                </p>
-                <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                  <span className="text-xs bg-neutral-100 px-3 py-1 rounded-full">👆 Drag items</span>
-                  <span className="text-xs bg-neutral-100 px-3 py-1 rounded-full">🎯 Drop on model</span>
-                  <span className="text-xs bg-neutral-100 px-3 py-1 rounded-full">✨ See it come to life</span>
-                </div>
-              </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link href="/products" className="btn-primary">
-                  Shop All
-                </Link>
-                <Link href="/customizer" className="btn-secondary">
-                  Full Customizer
-                </Link>
-              </div>
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="max-w-3xl">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tighter">
+              ESSENTIALS
+            </h1>
+            <p className="text-xl md:text-2xl text-neutral-200 mb-8 max-w-xl leading-relaxed">
+              Minimalist clothing for everyday life. Quality pieces that never go out of style.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/products" className="btn-primary inline-block text-center">
+                Shop Now
+              </Link>
+              <Link href="/studio" className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-full font-semibold hover:bg-white/20 transition-colors inline-block text-center">
+                Try Virtual Studio
+              </Link>
             </div>
 
-            {/* Right: Model Viewer */}
-            <div className="order-1 lg:order-2">
-              <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6">
-                <div className="h-[400px] md:h-[500px] mb-6">
-                  <ModelViewer compact />
-                </div>
-                
-                {/* Quick Parts Selector */}
-                <PartSelector compact />
+            {/* Features */}
+            <div className="grid grid-cols-3 gap-6 mt-16 pt-16 border-t border-white/20">
+              <div>
+                <p className="text-3xl font-bold text-white mb-1">16+</p>
+                <p className="text-neutral-400 text-sm">Products</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-white mb-1">30%</p>
+                <p className="text-neutral-400 text-sm">Off Sale</p>
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-white mb-1">Free</p>
+                <p className="text-neutral-400 text-sm">Shipping $150+</p>
               </div>
             </div>
           </div>
@@ -241,13 +227,5 @@ function HomeContent() {
         </div>
       </section>
     </main>
-  );
-}
-
-export default function Home() {
-  return (
-    <ModelProvider>
-      <HomeContent />
-    </ModelProvider>
   );
 }
