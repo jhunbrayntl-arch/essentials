@@ -28,6 +28,9 @@ export default function Header() {
             <Link href="/studio" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors">
               Studio
             </Link>
+            <Link href="/fitting-room" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors">
+              Fitting Room
+            </Link>
             <Link href="/customizer" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors">
               Customizer
             </Link>
@@ -83,6 +86,9 @@ export default function Header() {
               </Link>
               <Link href="/studio" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Studio
+              </Link>
+              <Link href="/fitting-room" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
+                Fitting Room
               </Link>
               <Link href="/customizer" className="text-sm uppercase tracking-wider hover:text-neutral-600 transition-colors" onClick={() => setIsMenuOpen(false)}>
                 Customizer
