@@ -1,16 +1,21 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { allProducts } from '@/data/products';
+import { ModelProvider } from '@/contexts/ModelContext';
+import ModelViewer from '@/components/customizer/ModelViewer';
+import PartSelector from '@/components/customizer/PartSelector';
 
 const featuredProducts = allProducts.slice(0, 4);
 
-const categories = [
+const shopCategories = [
   { name: 'Tops', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=600&fit=crop' },
   { name: 'Bottoms', image: 'https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=800&h=600&fit=crop' },
   { name: 'Outerwear', image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=600&fit=crop' },
 ];
 
-export default function Home() {
+function HomeContent() {
   return (
     <main>
       {/* Urgency Banner */}
@@ -20,32 +25,67 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center bg-neutral-100">
+      {/* Hero Section with Model Customizer */}
+      <section className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center bg-neutral-100 pt-20">
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920&h=1080&fit=crop"
             alt="Essentials Collection"
             fill
-            className="object-cover opacity-20"
+            className="object-cover opacity-10"
             priority
             unoptimized
           />
         </div>
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-6">
-            ESSENTIALS
-          </h1>
-          <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-xl mx-auto">
-            Minimalist clothing for everyday life. Quality pieces that never go out of style.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/products" className="btn-primary">
-              Shop Now
-            </Link>
-            <Link href="/about" className="btn-secondary">
-              Learn More
-            </Link>
+        
+        <div className="relative z-10 container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text Content */}
+            <div className="text-center lg:text-left order-2 lg:order-1">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-6">
+                ESSENTIALS
+              </h1>
+              <p className="text-lg md:text-xl text-neutral-600 mb-8 max-w-xl mx-auto lg:mx-0">
+                Minimalist clothing for everyday life. Quality pieces that never go out of style.
+              </p>
+              
+              {/* Drag Instructions */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-8 shadow-lg">
+                <h2 className="text-xl font-bold mb-3 flex items-center justify-center lg:justify-start gap-2">
+                  <span className="text-2xl">🎨</span>
+                  Create Your Look
+                </h2>
+                <p className="text-neutral-600 mb-4">
+                  Drag items from below onto the model to mix and match your perfect outfit!
+                </p>
+                <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                  <span className="text-xs bg-neutral-100 px-3 py-1 rounded-full">👆 Drag items</span>
+                  <span className="text-xs bg-neutral-100 px-3 py-1 rounded-full">🎯 Drop on model</span>
+                  <span className="text-xs bg-neutral-100 px-3 py-1 rounded-full">✨ See it come to life</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link href="/products" className="btn-primary">
+                  Shop All
+                </Link>
+                <Link href="/customizer" className="btn-secondary">
+                  Full Customizer
+                </Link>
+              </div>
+            </div>
+
+            {/* Right: Model Viewer */}
+            <div className="order-1 lg:order-2">
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6">
+                <div className="h-[400px] md:h-[500px] mb-6">
+                  <ModelViewer compact />
+                </div>
+                
+                {/* Quick Parts Selector */}
+                <PartSelector compact />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -123,7 +163,7 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {categories.map((category) => (
+            {shopCategories.map((category) => (
               <Link
                 key={category.name}
                 href={`/products?category=${category.name.toLowerCase()}`}
@@ -201,5 +241,13 @@ export default function Home() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <ModelProvider>
+      <HomeContent />
+    </ModelProvider>
   );
 }
