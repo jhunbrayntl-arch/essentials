@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useCart } from '@/contexts/CartContext';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { itemCount, toggleCart } = useCart();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-neutral-100">
@@ -33,13 +35,18 @@ export default function Header() {
 
           {/* Cart & Mobile Menu */}
           <div className="flex items-center space-x-4">
-            <button className="relative p-2 hover:text-neutral-600 transition-colors">
+            <button 
+              onClick={toggleCart}
+              className="relative p-2 hover:text-neutral-600 transition-colors"
+            >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <span className="absolute -top-1 -right-1 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                0
-              </span>
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium animate-pulse">
+                  {itemCount > 9 ? '9+' : itemCount}
+                </span>
+              )}
             </button>
 
             {/* Mobile Menu Button */}
