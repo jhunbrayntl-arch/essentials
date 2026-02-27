@@ -2,9 +2,11 @@
 
 import { useCart } from '@/contexts/CartContext';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function CartDrawer() {
+  const router = useRouter();
   const {
     items,
     isOpen,
@@ -24,6 +26,11 @@ export default function CartDrawer() {
   const [isApplying, setIsApplying] = useState(false);
 
   const total = subtotal - (subtotal * discount);
+
+  const handleCheckout = () => {
+    closeCart();
+    router.push('/checkout');
+  };
 
   const handleApplyPromo = () => {
     if (!codeInput.trim()) return;
@@ -197,7 +204,10 @@ export default function CartDrawer() {
             </div>
 
             {/* Checkout Button */}
-            <button className="w-full btn-primary py-4 text-lg">
+            <button
+              onClick={handleCheckout}
+              className="w-full btn-primary py-4 text-lg"
+            >
               Checkout
             </button>
 
