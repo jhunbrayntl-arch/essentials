@@ -17,15 +17,19 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+// Initialize Firebase only on client side
+const app = typeof window !== 'undefined' && getApps().length > 0 
+  ? getApp() 
+  : typeof window !== 'undefined' 
+    ? initializeApp(firebaseConfig)
+    : null;
 
-// Initialize services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+// Initialize services only on client side
+export const auth = app ? getAuth(app) : null;
+export const db = app ? getFirestore(app) : null;
+export const storage = app ? getStorage(app) : null;
 
 // Initialize Analytics only on client side
-export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+export const analytics = typeof window !== 'undefined' && app ? getAnalytics(app) : null;
 
 export default app;
